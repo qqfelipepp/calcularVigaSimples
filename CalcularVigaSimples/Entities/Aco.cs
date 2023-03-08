@@ -36,12 +36,28 @@ class Aco
 
     public double Kmd()
     {
-        double md = MomentoFletor();
+        double md = MomentoFletor() * 1.4;
         double largura = viga.Largura;
         double alturaUtil = AltUtil();
-        double fckN = fck * 1000.0 / 1.4;
-        double kmd = 1.4 * md / (largura * Math.Pow(alturaUtil, 2) * (fck / 1.4/1000));
+        double fckN = (fck / 1000.0) / 1.4;
+        double kmd = md / (largura * Math.Pow(alturaUtil, 2) * (fckN));
         return kmd;
+    }
+
+    public double LinhaNeutra(double x)
+    {
+        double kx = x;
+        return AltUtil() * kx;
+    }
+
+    public double AreaAco(double z)
+    {
+        double Kz = z;
+        double md = MomentoFletor() * 1.4;
+        double alturaUtil = AltUtil() / 100;
+        double fyd = 50 / 1.15;//Aço CA-50 diminuimos sua resistência
+        double areaAco = md / (Kz * alturaUtil * fyd);
+        return areaAco;
     }
 }
 
