@@ -6,9 +6,7 @@ using System.Reflection.Emit;
 class Program
 {
     static void Main(string[] args)
-    {
-        Tabela tab1 = new Tabela();
-
+    {       
         // Solicitando informações sobre a viga
         Console.WriteLine("DADOS DA VIGA COM AÇO CA-50:");
         Console.WriteLine();
@@ -35,15 +33,20 @@ class Program
         // Instanciando objetos
         Viga viga = new Viga(larguraViga, alturaViga, comprimentoViga);
         Alvenaria alvenaria = new Alvenaria(larguraViga, alturaAlvenaria);
-        Aco aco = new Aco(viga, alvenaria, diametroLongitudinal, diametroEstribo, fck);
-                
-        int valor = tab1.BuscarLinha(aco.Kmd());
+        Calculadora aco = new Calculadora(viga, alvenaria, diametroLongitudinal, diametroEstribo, fck);
+        Tabela tab1 = new Tabela();
+        Tabela tab2 = new Tabela();
+
+        int valor = tab1.BuscarLinhaTab1(aco.Kmd());
+        int valor2 = tab2.BuscarColunaTab2(larguraViga);
         Console.WriteLine();
         Console.WriteLine($"Coeficiente do momento fletor encontrado (Kmd): {aco.Kmd():F3}");
-        tab1.ExibirLinha(valor);
+        tab1.ExibirLinhaTab1(valor);        
+        tab2.ExibirValoresColunaEncontradaTab2(valor2);
         double kx = aco.LinhaNeutra(tab1.ValorKx(valor));
         double kz = aco.AreaAco(tab1.ValorKz(valor));
-
+        double asMin = aco.AreaMin(tab2.Pmin(valor2));
+        
         // Imprimindo resultados
         Console.WriteLine();
         Console.WriteLine();
@@ -53,8 +56,8 @@ class Program
         Console.WriteLine($"Momento na alvenaria: {alvenaria.MomentoAlvenaria():F2} kN/m");        
         Console.WriteLine($"Altura útil da viga: {aco.AltUtil():F2} cm");     
         Console.WriteLine($"Profundidade da linha neutra: {aco.LinhaNeutra(tab1.ValorKx(valor)):F2} cm");
-        Console.WriteLine($"Valor da área do aço: {aco.AreaAco(tab1.ValorKz(valor)):F2} cm²");
-
+        Console.WriteLine($"Área de aço encontrada: {aco.AreaAco(tab1.ValorKz(valor)):F2} cm²");
+        Console.WriteLine($"Área de aço mínima (NBR 6118): {aco.AreaMin(tab2.Pmin(valor2)):F2} cm²");
         Console.ReadKey();
 
     }

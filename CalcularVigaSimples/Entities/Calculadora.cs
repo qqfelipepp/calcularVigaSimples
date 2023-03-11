@@ -1,13 +1,14 @@
 ﻿namespace CalcularVigaSimples.Entities;
-class Aco
-{
+class Calculadora
+{    
     private Viga viga;
     private Alvenaria alvenaria;
     private double diametroLongitudinal;
     private double diametroEstribo;
     private double fck;
+       
 
-    public Aco(Viga viga, Alvenaria alvenaria, double diametroLongitudinal, double diametroEstribo, double fck)
+    public Calculadora(Viga viga, Alvenaria alvenaria, double diametroLongitudinal, double diametroEstribo, double fck)
     {
         this.viga = viga;
         this.alvenaria = alvenaria;
@@ -44,20 +45,26 @@ class Aco
         return kmd;
     }
 
-    public double LinhaNeutra(double x)
-    {
-        double kx = x;
+    public double LinhaNeutra(double kx)
+    {        
         return AltUtil() * kx;
     }
 
-    public double AreaAco(double z)
-    {
-        double Kz = z;
+    public double AreaAco(double kz)
+    {        
         double md = MomentoFletor() * 1.4;
         double alturaUtil = AltUtil() / 100;
-        double fyd = 50 / 1.15;//Aço CA-50 diminuimos sua resistência
-        double areaAco = md / (Kz * alturaUtil * fyd);
+        double ys = 1.15;//Coeficiente de ponderação da resistencia do Aço CA-50 conforme tabela 17.3 da NBR 6118:2014
+        double fyd = 50 / ys;
+        double areaAco = md / (kz * alturaUtil * fyd);
         return areaAco;
     }
+
+    public double AreaMin(double pMin)
+    {        
+        double asMin = pMin * (viga.Largura * viga.Altura) / 100;
+        return asMin;
+    }
+
 }
 
