@@ -13,7 +13,7 @@ class Alvenaria
     public double MomentoAlvenaria()
     {
         double pesoEspecifico = 13;
-        return largura * altura * pesoEspecifico/10000;
+        return largura * altura * pesoEspecifico / 10000;
     }
 }
 
